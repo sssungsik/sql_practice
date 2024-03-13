@@ -490,4 +490,58 @@ CONVERT('970201', UNSIGNED), CAST(970201 as CHAR(8));
 /* 날짜 변환 함수 */
 SELECT 
 	DATE_FORMAT('970201', '%Y연%M월%D일'),
-	DATE_FORMAT('970201', '%y연%m월%d일')
+	DATE_FORMAT('970201', '%y연%m월%d일')ksmart51db
+	
+/* 상품 테이블에서 전체 상품 가격의 합 조회 */
+SELECT
+	SUM(g.g_price) AS '전체 상품 가격 합'
+FROM
+	tb_goods AS g
+
+/* 상품 테이블에서 판매자별 판매상품가격 합계와 아이디 조회*/
+SELECT
+	SUM(g.g_price),
+	g.g_seller_id
+FROM
+	tb_goods AS g
+GROUP BY 
+	g.g_seller_id;
+
+/* 판매자별 취급 상품가격 합계가 300만원보다 많은 판매자 아이디/금액 조회 */
+SELECT
+	g.g_seller_id,
+	SUM(g.g_price)
+FROM 
+	tb_goods AS g
+GROUP BY 
+	g.g_seller_id
+HAVING
+	SUM(g.g_price) > 3000000;
+
+/* 최대구매수량, 최소구매수량, 총 구매수량 조회 */
+SELECT
+	MAX(o.o_amount) AS '최대구매수량',
+	MIN(o.o_amount) AS '최소구매수량',
+	SUM(o.o_amount) AS '총 구매수량'
+FROM
+	tb_order AS o;
+
+/* 윈도우 함수 */
+SELECT
+	c.CountryCode,
+	c.Population,
+	MAX(c.Population) OVER(PARTITION BY c.CountryCode) AS '인구'
+FROM
+	city AS c
+
+/* 순위 함수 */
+SELECT
+	c.name,
+	ROW_NUMBER() OVER (ORDER BY c.Population) AS 'ROW_NUMBER',
+	RANK() OVER (ORDER BY c.Population) AS 'RANK',
+	DENSE_RANK() OVER (ORDER BY c.Population) AS 'DENSE_RANK'
+FROM
+	city AS c
+WHERE
+	c.CountryCode = 'kor';
+
