@@ -394,8 +394,8 @@ HAVING AVG(c.Population);
 
 -- 국가코드별 도시 개수 조회, 도시개수 100개 이상인 국가만 해당
 SELECT 
-	c.CountryCode AS '이름', 
-	count(c.Name) AS '개수'
+	c.CountryCode, 
+	count(c.Name)
 FROM
 	city AS c
 GROUP BY c.CountryCode
@@ -403,5 +403,91 @@ HAVING COUNT(c.name) > 100
 ORDER BY count(c.Name) desc
 LIMIT 4;
 
+-- IFNULL 관련함수
+SELECT
+	IFNULL(NULL, '널'),
+	IFNULL(100, '널아님')
+	
+-- ROUND 관련함수
+SELECT 
+	ROUND(3.33312323, 4);
+
+-- LENGTH 관련함수
+SELECT 
+	LENGTH('ㄱㄱㄱㄱ'),
+	length('asddd'),
+	CHAR_LENGTH('ddd기')
+
+-- CONCAT, TRIM 관련함수
+SELECT
+	CONCAT('나는', '입니다'),
+	CONCAT_WS('~~~~','나는', '입','니다'),
+	TRIM('   dsd    d ');
+
+-- REPLACE 관련함수	
+SELECT
+	REPLACE('안녕하세요','하세요','합니다')
+	
+-- SUBSTR 관련함수	
+SELECT
+	SUBSTR('안녕하세요',3),	
+	SUBSTR('안녕하세요',2,2)
+	
+-- 도시이름의 글자수 25보다 큰 도시의 이름/코드/지역구 조회
+SELECT
+	c.Name,
+	c.CountryCode,
+	c.District
+FROM
+	city AS c 
+WHERE
+	CHAR_LENGTH(c.Name) > 25;
+	
+-- 도시이름과 길이 조회. 도시이름 길이가 작은것부터 큰 순서
+SELECT
+	c.Name,
+	CHAR_LENGTH(c.Name) AS '이름길이'
+FROM
+	city AS c
+ORDER BY CHAR_LENGTH(c.Name) desc;
 
 
+-- 국가코드 첫 글자와 마지막 글자 합쳐서 소문자로 조회, 조회 열 이름 small_code로 조회
+SELECT
+	lower(concat(LEFT(c.CountryCode,1), RIGHT(c.CountryCode,1))) AS 'small_code'
+FROM
+	city AS c
+
+-- sakila DB의 language 테이블에서 이름에 i가 들어가는 데이터 찾고 i를 I로 조회, 조회 이름 upper_I
+
+SELECT
+	replace(l.name, 'i', 'I') AS upper_I
+FROM
+	language AS l
+WHERE
+	l.name LIKE '%i%';
+	
+/* 날짜 및 시간함수 */
+SELECT
+NOW(), CURRENT_DATE(), CURRENT_TIME(), YEAR(NOW()), MONTH(NOW())
+
+/* 날짜 및 시간함수2 */
+SELECT
+	ADDDATE('2021.02.01', INTERVAL 10 DAY),
+	SUBDATE('2021.02.01', INTERVAL 10 DAY),
+	DATEDIFF('2023.05.02', NOW());
+
+/* 시스템함수 */
+SELECT
+	VERSION(), -- 현재 버전
+	DATABASE(), -- 현재 DB
+	SLEEP(0.5) -- 실행 지연 
+
+/* 문자 형 변환 함수 */
+SELECT 
+CONVERT('970201', UNSIGNED), CAST(970201 as CHAR(8));
+
+/* 날짜 변환 함수 */
+SELECT 
+	DATE_FORMAT('970201', '%Y연%M월%D일'),
+	DATE_FORMAT('970201', '%y연%m월%d일')
