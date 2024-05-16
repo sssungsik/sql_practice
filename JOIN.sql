@@ -37,6 +37,11 @@ FROM
 WHERE 
 	c1.Continent = 'Europe';
 	
+SELECT ct.Name, cy.Continent
+FROM city AS ct INNER JOIN country AS cy ON ct.CountryCode = cy.Code
+WHERE	cy.Continent = 'Europe';
+
+	
 /* continent 가 ASIA인 도시의 인구수 합 조회 */
 SELECT
 	sum(ct.Population) AS '인구 합',

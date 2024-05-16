@@ -22,6 +22,10 @@ CREATE TABLE tb_user (
 	u_date DATE COMMENT '등록일자'
 );
 
+CREATE TABLE korea (
+	`code` VARCHAR (30) NOT NULL PRIMARY KEY COMMENT '코드',
+	`name` VARCHAR(50) NOT NULL COMMENT '이름');
+
 -- 컬럼 이름 변경
 ALTER TABLE tb_member CHANGE COLUMN u_mob2 u_reg_date2 DATE;
 
@@ -56,12 +60,30 @@ INSERT INTO tb_member
 	VALUES 
 		('VAL12', 'qwerert', '조광철', '24.03.23', '관악구', '2811', '4222', NOW());
 
+INSERT INTO korea
+(`code`,`name`)
+VALUES
+('코드1','순창'),
+('코드2','대구'),
+('코드3','전주'),
+('코드4','서초');
+
+
+
+
+
 -- 데이터수정
 UPDATE tb_member
 SET
 	u_birth = '88/12/24'
 WHERE
 	u_addr = '강남구';
+	
+UPDATE korea
+SET `name` = '신림'
+WHERE
+	`code`= '코드1';	
+	
 
 -- 데이터삭제
 DELETE 
@@ -169,6 +191,7 @@ FROM
 	city AS c
 WHERE
 	c.Population BETWEEN 6789479 AND 8000000;
+	
 
 -- 국가코드 kor 이거나 afg 이거나 nld인 이름/코드 조회
 
